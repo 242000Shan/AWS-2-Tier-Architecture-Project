@@ -1,36 +1,44 @@
-# ☁ AWS Two-Tier Architecture Deployment
+# ☁ AWS Two-Tier Architecture Deployment 
 
 ## 📌 Project Overview
 
-This project demonstrates the deployment of a secure and scalable Two-Tier Architecture on Amazon Web Services (AWS).
+This project demonstrates the deployment of a secure **Two-Tier Architecture** using Amazon Web Services.
 
-The architecture separates the application layer and database layer into different network tiers using Amazon VPC, ensuring improved security, isolation, and controlled access.
+The architecture separates:
 
-This setup follows cloud security best practices and high-availability design principles.
+* **Web Tier (Application Layer)** – Hosted on Amazon EC2
+* **Database Tier (Data Layer)** – Hosted on Amazon RDS
+
+The database is deployed in a private subnet to ensure secure communication and restricted access.
 
 ---
 
 ## 🏗 Architecture Design
 
-Client (Internet)
-        ↓
-Public Subnet (Web Tier - EC2)
-        ↓
-Private Subnet (Database Tier - EC2)
+```
+Internet User
+      │
+      ▼
+EC2 Instance (Web Server - Public Subnet)
+      │
+      ▼
+Amazon RDS MySQL (Private Subnet)
+```
 
 ---
 
 ## 🛠 Technologies Used
 
-- AWS EC2
-- Amazon VPC
-- Public & Private Subnets
-- Internet Gateway
-- Route Tables
-- Security Groups
-- SSH (Linux)
-- Apache (Web Server)
-- MySQL (Database)
+* Amazon EC2
+* Amazon RDS (MySQL Engine)
+* Amazon VPC
+* Public & Private Subnets
+* Internet Gateway
+* Route Tables
+* Security Groups
+* Apache Web Server
+* PHP
+* Linux (Amazon Linux 2)
 
 ---
 
@@ -38,103 +46,125 @@ Private Subnet (Database Tier - EC2)
 
 ### 1️⃣ Virtual Private Cloud (VPC)
 
-- Created custom VPC with CIDR block (e.g., 10.0.0.0/16)
-- Enabled DNS support and DNS hostnames
-
-### 2️⃣ Subnets
-
-- Public Subnet (10.0.0.0/23)
-  - Hosts Web Server EC2
-  - Connected to Internet Gateway
-
-- Private Subnet (10.0.2.0/23)
-  - Hosts Database EC2
-  - No direct internet access
-
-### 3️⃣ Internet Gateway
-
-- Attached to VPC
-- Allows public subnet instances to access internet
-
-### 4️⃣ Route Tables
-
-- Public Route Table → Route to Internet Gateway
-- Private Route Table → Internal routing only
-
-### 5️⃣ EC2 Instances
-
-- Web Server (Public Subnet)
-  - Installed Apache
-  - Serves frontend application
-
-- Database Server (Private Subnet)
-  - Installed MySQL
-  - Accessible only from Web Server
-
-### 6️⃣ Security Groups Configuration
-
-Web Server Security Group:
-- Allow HTTP (Port 80) from 0.0.0.0/0
-- Allow SSH (Port 22) from My IP
-- Allow MySQL outbound to DB
-
-Database Security Group:
-- Allow MySQL (Port 3306) ONLY from Web Server Security Group
-- No public access
+* Created custom VPC (CIDR: 10.0.0.0/16)
+* Enabled DNS support & hostnames
+* Provided isolated cloud networking environment
 
 ---
 
-## 🔐 Security Implementation
+### 2️⃣ Subnets
 
-- Database server isolated in private subnet
-- Controlled traffic using Security Groups
-- No direct public access to database
-- Restricted SSH access
-- Principle of Least Privilege applied
+**Public Subnet**
+
+* Hosts EC2 Web Server
+* Connected to Internet Gateway
+* Allows internet access
+
+**Private Subnet**
+
+* Hosts Amazon RDS
+* No direct internet access
+* Accessible only from Web Server
+
+---
+
+### 3️⃣ Internet Gateway
+
+* Attached to VPC
+* Enables internet access for public subnet resources
+
+---
+
+### 4️⃣ Route Tables
+
+**Public Route Table**
+
+* Route: 0.0.0.0/0 → Internet Gateway
+
+**Private Route Table**
+
+* Internal VPC routing only
+* No internet route
+
+---
+
+### 5️⃣ Web Tier (EC2)
+
+* Launched EC2 in Public Subnet
+* Installed:
+
+  * Apache
+  * PHP
+* Hosted simple web application
+* Connected securely to RDS
+
+---
+
+### 6️⃣ Database Tier (RDS)
+
+* Deployed Amazon RDS (MySQL)
+* Placed in Private Subnet
+* Public access disabled
+* Only accessible via Web Server Security Group
+
+---
+
+## 🔐 Security Group Configuration
+
+### Web Server Security Group
+
+* Allow HTTP (80) from 0.0.0.0/0
+* Allow SSH (22) from My IP only
+* Allow outbound MySQL traffic
+
+### Database Security Group
+
+* Allow MySQL (3306) ONLY from Web Server Security Group
+* No public inbound access
 
 ---
 
 ## 🚀 Deployment Steps
 
-1. Created VPC
+1. Created custom VPC
 2. Created Public and Private Subnets
 3. Attached Internet Gateway
 4. Configured Route Tables
-5. Launched Web Server EC2 in Public Subnet
-6. Launched Database EC2 in Private Subnet
+5. Launched EC2 in Public Subnet
+6. Created Amazon RDS in Private Subnet
 7. Configured Security Groups
-8. Installed Web & Database services
-9. Tested connectivity between tiers
+8. Installed Apache & configured application
+9. Verified EC2 to RDS connectivity
 
 ---
 
 ## 🧪 Testing & Validation
 
-- Verified public access to web server
-- Verified database is NOT publicly accessible
-- Confirmed web server connects to database internally
-- Tested security group restrictions
+* Verified public access to web application
+* Confirmed RDS is not publicly accessible
+* Tested database connectivity from EC2
+* Validated Security Group restrictions
 
 ---
 
 ## 🎯 Key Learning Outcomes
 
-- Hands-on experience with AWS networking
-- Understanding VPC architecture
-- Subnet segmentation
-- Security group configuration
-- Cloud infrastructure security best practices
-- Designing secure production-ready architecture
+* AWS VPC Networking concepts
+* Public vs Private Subnet design
+* Secure EC2–RDS communication
+* Security Group configuration
+* Cloud infrastructure deployment
+* Basic scalability concepts
 
 ---
 
 ## 🔒 Security Note
 
-This project was implemented in a controlled AWS environment for educational purposes.
+This project was implemented in a controlled AWS environment for educational and practice purposes.
 
 ---
 
 ## 👩‍💻 Author
 
-Shanmuga Priya  
-Cloud & DevOps Enthusiast
+Shanmuga Priya
+Cloud & DevOps Learner
