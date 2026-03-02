@@ -25,8 +25,6 @@ EC2 Instance (Web Server - Public Subnet)
 Amazon RDS MySQL (Private Subnet)
 ```
 
----
-
 ## 🛠 Technologies Used
 
 * Amazon EC2
@@ -166,5 +164,5 @@ This project was implemented in a controlled AWS environment for educational and
 
 ## 👩‍💻 Author
 
-Shanmuga Priya
-Cloud & DevOps Learner
+Shanmuga Priya.S
+(Cloud & DevOps Learner)
